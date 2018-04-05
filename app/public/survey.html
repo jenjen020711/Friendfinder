@@ -29,7 +29,7 @@
     
         <h3><strong>Question 1</strong></h3>
         <h4>Your mind is always buzzing with unexplored ideas and plans.</h4>
-        <select class="chosen-select" id="q1">
+        <select class="chosen-select" id="question1">
             <option value=""></option>
             <option value="1">1 (Strongly Disagree)</option>
             <option value="2">2</option>
@@ -40,7 +40,7 @@
     
         <h3><strong>Question 2</strong></h3>
         <h4>Generally speaking, you rely more on your experience than your imagination.</h4>
-        <select class="chosen-select" id="q2">
+        <select class="chosen-select" id="question2">
             <option value=""></option>
             <option value="1">1 (Strongly Disagree)</option>
             <option value="2">2</option>
@@ -52,7 +52,7 @@
     
         <h3><strong>Question 3</strong></h3>
         <h4>You find it easy to stay relaxed and focused even when there is some pressure.</h4>
-        <select class="chosen-select" id="q3">
+        <select class="chosen-select" id="question3">
             <option value=""></option>
             <option value="1">1 (Strongly Disagree)</option>
             <option value="2">2</option>
@@ -64,7 +64,7 @@
     
         <h3><strong>Question 4</strong></h3>
         <h4>You rarely do something just out of sheer curiosity.</h4>
-        <select class="chosen-select" id="q4">
+        <select class="chosen-select" id="question4">
             <option value=""></option>
             <option value="1">1 (Strongly Disagree)</option>
             <option value="2">2</option>
@@ -76,7 +76,7 @@
     
         <h3><strong>Question 5</strong></h3>
         <h4>People can rarely upset you.</h4>
-        <select class="chosen-select" id="q5">
+        <select class="chosen-select" id="question5">
             <option value=""></option>
             <option value="1">1 (Strongly Disagree)</option>
             <option value="2">2</option>
@@ -88,7 +88,7 @@
     
         <h3><strong>Question 6</strong></h3>
         <h4>It is often difficult for you to relate to other people’s feelings.</h4>
-        <select class="chosen-select" id="q6">
+        <select class="chosen-select" id="question6">
             <option value=""></option>
             <option value="1">1 (Strongly Disagree)</option>
             <option value="2">2</option>
@@ -100,7 +100,7 @@
     
         <h3><strong>Question 7</strong></h3>
         <h4>In a discussion, truth should be more important than people’s sensitivities.</h4>
-        <select class="chosen-select" id="q7">
+        <select class="chosen-select" id="question7">
             <option value=""></option>
             <option value="1">1 (Strongly Disagree)</option>
             <option value="2">2</option>
@@ -111,7 +111,7 @@
     
         <h3><strong>Question 8</strong></h3>
         <h4>You rarely get carried away by fantasies and ideas.</h4>
-        <select class="chosen-select" id="q8">
+        <select class="chosen-select" id="question8">
             <option value=""></option>
             <option value="1">1 (Strongly Disagree)</option>
             <option value="2">2</option>
@@ -122,7 +122,7 @@
     
         <h3><strong>Question 9</strong></h3>
         <h4>You think that everyone’s views should be respected regardless of whether they are supported by facts or not.</h4>
-        <select class="chosen-select" id="q9">
+        <select class="chosen-select" id="question9">
             <option value=""></option>
             <option value="1">1 (Strongly Disagree)</option>
             <option value="2">2</option>
@@ -133,7 +133,7 @@
     
         <h3><strong>Question 10</strong></h3>
         <h4>You feel more energetic after spending time with a group of people.</h4>
-        <select class="chosen-select" id="q10">
+        <select class="chosen-select" id="question10">
             <option value=""></option>
             <option value="1">1 (Strongly Disagree)</option>
             <option value="2">2</option>
@@ -156,7 +156,75 @@
     </footer>
 
 	</div>
-
-
 </body>
 </html>
+
+<script type = "text/javascript">
+
+    // In this code below we create the Front-end JavaScript which "POSTS" our form data to our express server.
+    // In essence, when the user hits submit, jQuery grabs all of the fields then sends a post request to our api
+    // Our api recognizes the route (/api/tables)... and then runs the associated code (found in api-routes.js).
+    // In this case the associated code "saves" the data to the table-data.js file or waitinglist-data.js file
+
+    $(".submit").on("click", function(event) {
+       event.preventDefault();
+      
+
+      // Here we grab the form elements
+      var newFriend = {
+        name: $("#name").val().trim(),
+        photo: $("#photo").val().trim(),
+        scores: [
+            $("#question1").val(),
+            $("#question2").val(),
+            $("#question3").val(),
+            $("#question4").val(),
+            $("#question5").val(),
+            $("#question6").val(),
+            $("#question7").val(),
+            $("#question8").val(),
+            $("#question9").val(),
+            $("#question10").val()
+        ]
+      
+      };
+      console.log(newFriend);
+
+      // This line is the magic. It"s very similar to the standard ajax function we used.
+      // Essentially we give it a URL, we give it the object we want to send, then we have a "callback".
+      // The callback is the response of the server. In our case, we set up code in api-routes that "returns" true or false
+      // depending on if a tables is available or not.
+
+      $.post("/api/survey", newFriend,
+        function(data) {
+
+        // If there is a match, alert user that they hav a match
+        if (data) {
+        alert("Yay! You have a match!");
+        }
+
+          // If there is no match, alert user .
+          else {
+            alert("Please fill out required form. ");
+          }
+
+          // Clear the form when submitting
+
+            $("#name").val("").trim(""),
+            $("#photo").val("").trim(""),
+            $("#question1").val(""),
+            $("#question2").val(""),
+            $("#question3").val(""),
+            $("#question4").val(""),
+            $("#question5").val(""),
+            $("#question6").val(""),
+            $("#question7").val(""),
+            $("#question8").val(""),
+            $("#question9").val(""),
+            $("#question10").val("");
+       
+        });
+
+    });
+
+</script>
